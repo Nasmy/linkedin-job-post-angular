@@ -1,0 +1,341 @@
+<div class="row">
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <form [formGroup]="postForm">
+          <div class="form-group">
+            <label>Post to</label>
+            <ng-select
+              [items]="networks"
+              bindLabel="first_name"
+              bindValue="first_name"
+              placeholder="Select post to"
+              (change)="getSlectedPostTo($event)"
+            >
+              <ng-template ng-label-tmp let-item="item">
+                <div class="d-flex align-items-center">
+                  <img
+                    class="rounded-circle"
+                    [src]="item.image_url"
+                    alt=""
+                    width="15"
+                    height="15"
+                  />
+                  <div class="ml-2">
+                    <p>{{ item.first_name }}</p>
+                  </div>
+                </div>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-index="index">
+                <div class="d-flex align-items-center">
+                  <img
+                    class="rounded-circle"
+                    [src]="item.image_url"
+                    width="20"
+                    height="20"
+                    alt=""
+                  />
+                  <div class="ml-2">
+                    <p>{{ item.first_name }}</p>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-select>
+            <input
+              type="hidden"
+              formControlName="person_id"
+              [ngClass]="{
+                'is-invalid': submitted && pf.person_id.errors
+              }"
+            />
+            <div
+              *ngIf="submitted && pf.person_id.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="pf.person_id.errors.required">
+                Post to {{ formValdationError.isRequired }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Content</label>
+            <editor
+              (onSelectionChange)="setContent($event)"
+              apiKey="onjy5hvq9f935tc2sd18s5gj5s6z12bwkurhpuutlb9bub91"
+              [init]="{
+                height: 200,
+                menubar: false,
+                plugins: [
+                  'advlist autolink lists link image charmap print preview anchor emoticons',
+                  'searchreplace visualblocks code fullscreen',
+                  'insertdatetime media table paste code help wordcount'
+                ],
+                toolbar: 'emoticons',
+                toolbar_location: 'bottom'
+              }"
+              [ngClass]="{
+                'is-invalid': submitted && pf.message.errors
+              }"
+            ></editor>
+            <div
+              *ngIf="submitted && pf.message.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="pf.message.errors.required">
+                Content {{ formValdationError.isRequired }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Media</label>
+            <p>
+              Selct Images/Video/PDF from media liblaray or upload hear. Images
+              will be upload in the Order selected here
+            </p>
+            <input
+              #postPhoto
+              style="margin-bottom: 20px"
+              formControlName="media"
+              class="form-control"
+              id="media"
+              type="file"
+              multiple=""
+              (change)="onFileChange($event)"
+            />
+            <div class="row">
+              <div *ngFor="let url of media; let i = index" class="col-2 mt-2">
+                <img [src]="url" style="width: 100%" />
+                <a
+                  (click)="onDelete(i)"
+                  class="badge badge-danger"
+                  style="width: 100%"
+                  >Delete</a
+                >
+              </div>
+            </div>
+            <br />
+          </div>
+          <div class="form-group">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  (change)="onCheckLikePost($event)"
+                />
+                <i class="input-frame"></i>
+                Like the post as Author
+              </label>
+              <p>
+                Many Social Media Experts believ, liking the post as an author
+                increases the exposure. There is no official info to back it.
+                Time to test it out hear.
+              </p>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  (change)="onCheckFirstComment($event)"
+                />
+                <i class="input-frame"></i>
+                Include the first comment
+              </label>
+              <p>
+                It is expert advice to exclude links from original post and
+                include in the first comment. If you enable this option you can
+                add the comment to go with the post.
+              </p>
+            </div>
+          </div>
+
+          <div *ngIf="firstComment" class="form-group">
+            <label>First Comment</label>
+            <editor
+              (onSelectionChange)="setComment($event)"
+              apiKey="onjy5hvq9f935tc2sd18s5gj5s6z12bwkurhpuutlb9bub91"
+              [init]="{
+                height: 200,
+                menubar: false,
+                plugins: [
+                  'advlist autolink lists link image charmap print preview anchor emoticons',
+                  'searchreplace visualblocks code fullscreen',
+                  'insertdatetime media table paste code help wordcount'
+                ],
+                toolbar: 'emoticons',
+                toolbar_location: 'bottom'
+              }"
+            ></editor>
+          </div>
+          <div class="form-group">
+            <button
+              class="btn btn-primary mr-2"
+              type="submit"
+              (click)="getShedulePicker(basicModal)"
+            >
+              Schedule
+            </button>
+            <button
+              class="btn btn-primary mr-2"
+              type="submit"
+              (click)="onPost(3)"
+            >
+              Save as draft
+            </button>
+            <button
+              class="btn btn-primary mr-2"
+              (click)="onPost(1)"
+              type="submit"
+            >
+              Post
+            </button>
+            <!--<button class="btn btn-primary mr-2" type="submit">Delete</button>-->
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <!--Post View Header block-->
+      <div class="card-header">
+        <h6 class="card-title">Post View</h6>
+        <div
+          class="d-flex align-items-center justify-content-between"
+          *ngIf="postToSelectedItem != null"
+        >
+          <div class="d-flex align-items-center">
+            <img
+              class="img-xs rounded-circle"
+              [src]="postToSelectedItem.image_url"
+              alt=""
+            />
+            <div class="ml-2">
+              <p>{{ postToSelectedItem.first_name }}</p>
+              <p class="tx-11 text-muted">{{ postToSelectedItem.headline }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Post View Header block-->
+
+      <!---Post View Body block-->
+      <div class="card-body">
+        <div class="row mb-5">
+          <div class="col-12">
+            <p>{{ content }}</p>
+          </div>
+        </div>
+        <div class="row">
+          <ng-container *ngFor="let url of media; let i = index">
+            <div class="col-6" *ngIf="i == 0">
+              <img [src]="url" style="width: 100%" />
+            </div>
+            <div class="col-6" *ngIf="i == 1">
+              <img [src]="url" style="width: 100%" />
+            </div>
+            <div class="col-4" *ngIf="i > 1">
+              <img [src]="url" style="width: 100%" />
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <!--End Post view body block-->
+      <div class="card-footer">
+        <!---Social Actions -->
+        <div class="d-flex post-actions">
+          <a
+            href="javascript:;"
+            class="d-flex align-items-center text-muted mr-4"
+          >
+            <i class="icon-md" data-feather="thumbs-up" appFeatherIcon></i>
+            <p
+              [ngStyle]="{ color: likePostAuthor ? 'blue' : '' }"
+              class="d-none d-md-block ml-2"
+            >
+              Like
+            </p>
+          </a>
+          <a
+            href="javascript:;"
+            class="d-flex align-items-center text-muted mr-4"
+          >
+            <i class="icon-md" data-feather="message-square" appFeatherIcon></i>
+            <p class="d-none d-md-block ml-2">Comment</p>
+          </a>
+          <a href="javascript:;" class="d-flex align-items-center text-muted">
+            <i class="icon-md" data-feather="share" appFeatherIcon></i>
+            <p class="d-none d-md-block ml-2">Share</p>
+          </a>
+        </div>
+        <!---End Social Actions-->
+
+        <!----Comment Block ----->
+        <div class="d-flex align-items-center ml-4 mt-5" *ngIf="firstComment">
+          <img
+            *ngIf="postToSelectedItem != null"
+            class="img-xs rounded-circle"
+            [src]="postToSelectedItem.image_url"
+            alt=""
+          />
+          <div
+            class="ml-2"
+            style="
+              background-color: #f2f1ed;
+              padding: 10px;
+              width: 90%;
+              border-bottom-left-radius: 5px;
+              border-bottom-right-radius: 5px;
+              border-top-right-radius: 5px;
+            "
+          >
+            <p *ngIf="postToSelectedItem != null">
+              {{ postToSelectedItem.first_name }}
+            </p>
+            <p class="pt-2" *ngIf="comment != null">
+              {{ this.comment }}
+            </p>
+          </div>
+        </div>
+        <!---End comment block-->
+      </div>
+    </div>
+  </div>
+</div>
+
+<ngx-spinner></ngx-spinner>
+<ng-template #basicModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Schedule your post</h5>
+    <button
+      type="button"
+      class="close"
+      (click)="modal.close('by: close icon')"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Date time picker will goes</p>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="modal.close('by: close button')"
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="modal.close('by: save button')"
+    >
+      Save changes
+    </button>
+  </div>
+</ng-template>

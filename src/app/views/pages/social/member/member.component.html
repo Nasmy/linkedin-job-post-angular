@@ -1,0 +1,38 @@
+<div>
+  <h3>Private social accounts.</h3>
+  <p>These are the social accounts that only you can view and post to.</p>
+
+  <br />
+  <button
+    type="button"
+    (click)="openXlModal()"
+    class="btn btn-primary btn-icon-text"
+  >
+    <i class="btn-icon-prepend" data-feather="plus"></i>
+    Private Account
+  </button>
+</div>
+
+<div>
+  <br /><br />
+  <h4>My active networks</h4>
+  <div *ngFor="let item of registerdNetwork">
+    <button class="btn btn-light btn-lg btn-icon-text mb-3 mt-2">
+      {{ item["network_type"] }} - {{ item["first_name"] | titlecase }}
+    </button>
+  </div>
+</div>
+
+<button
+  #viewNetworks
+  id="viewNetworks"
+  (click)="modal.showModal(network, 'lg', 'network', 'static')"
+  style="visibility: hidden"
+></button>
+
+<ng-template #network let-modal>
+  <app-network
+    (registerNetwork)="getRegisterdNetwork($event)"
+    (modalClose)="modal.close('by: close icon')"
+  ></app-network>
+</ng-template>

@@ -1,0 +1,74 @@
+
+<div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+    <div>
+      <h4 class="mb-3 mb-md-0">List of posts</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12 col-xl-12 stretch-card mt-2">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-baseline mb-2">
+              <h6 class="card-title mb-0">LinkedIn</h6>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-hover mb-0 mt-3">
+                <thead>
+                  <tr>
+                    <th class="pt-0">ACCOUNT</th>
+                    <th class="pt-0">POST</th>
+                    <th class="pt-0">TYPE</th>
+                    <th class="pt-0">LABELS</th>
+                    <th class="pt-0">STATUS</th>
+                    <th class="pt-0">DATE</th>
+                    <th class="pt-0">BY</th>
+                    <th class="pt-0"><i class="link-icon" data-feather="eye"></i></th>
+                    <th class="pt-0"><i class="link-icon" data-feather="thumbs-up"></i></th>
+                    <th class="pt-0">ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let info of postData; let i = index">
+                        <tr>
+                            <td>
+                                
+                                <img
+                            class="rounded-circle"
+                            [src]="info.postAccountInfo[0].image_url"
+                            alt=""
+                            width="15"
+                            height="15"
+                          />
+                            </td>
+                            <td>{{ info.message }}</td>
+                            <td>
+                                <span *ngIf="info.post_type == 'IMAGE'"><i class="link-icon" data-feather="image" appFeatherIcon></i></span>
+                                <span *ngIf="info.post_type == 'ARTICLE'"><i class="link-icon" data-feather="image" appFeatherIcon></i></span>
+                            </td>
+                            <td></td>
+                        
+                                <td><span *ngIf="info.status == 'DRAFT'" class="badge badge-secondary">{{ info.status }} </span>
+                                    <span *ngIf="info.status == 'PUBLISHED'" class="badge badge-success">{{ info.status }}</span>
+                                    <span *ngIf="info.status == 'Schedule'" class="badge badge-danger">{{ info.status }}</span>
+                                </td>
+                            <td><span>{{ info.updated_at | date:'full' }} </span></td>
+                            <td><img
+                                class="rounded-circle"
+                                [src]="info.postByInfo[0].image_url"
+                                alt=""
+                                width="15"
+                                height="15"
+                              /></td>
+                            <td></td>
+                            <td></td>
+                          </tr>      
+                    </ng-container>
+                                       
+                </tbody>
+              </table>
+            </div>
+          </div> 
+        </div>
+      </div>   
+</div>

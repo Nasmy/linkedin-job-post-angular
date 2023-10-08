@@ -1,0 +1,68 @@
+<div
+  class="d-flex justify-content-between align-items-center flex-wrap grid-margin"
+>
+  <div class="row mt-5">
+    <div class="col-2"></div>
+    <div class="col-8" *ngIf="!this.isLinkedInLoaded">
+      <div class="spinner-grow spinner-grow-sm" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <div class="col-8" *ngIf="this.isLinkedInLoaded">
+      <h3 class="mb-5">Which LinkedIn accounts do you want to add?</h3>
+
+      <h4 class="mb-5">Personal Profile</h4>
+
+      <div class="media d-block d-sm-flex">
+        <img
+          *ngIf="userInfo.image_url"
+          src="{{ userInfo.image_url }}"
+          class="wd-100p wd-sm-100 mb-3 mb-sm-0 mr-3"
+          alt="..."
+        />
+        <img
+          *ngIf="!userInfo.image_url"
+          src="assets/images/default.png"
+          class="wd-100p wd-sm-100 mb-3 mb-sm-0 mr-3"
+          alt="..."
+        />
+        <div class="media-body">
+          <h5 class="mt-0">
+            {{ userInfo.first_name }} {{ userInfo.last_name }}
+          </h5>
+        </div>
+
+        <button
+          type="button"
+          (click)="addMember()"
+          class="btn btn-primary btn-icon-text"
+        >
+          <i class="btn-icon-prepend" data-feather="plus"></i>
+          Add
+        </button>
+      </div>
+    </div>
+    <div class="col-2"></div>
+  </div>
+</div>
+
+<!--<div class="col-md-4 grid-margin stretch-card">
+  <div class="card">
+    <div class="card-body d-flex flex-column align-items-center">
+      <p class="card-description">Mixin example</p>
+      <button
+        [swal]="{
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 1113000,
+          title: 'Signed in successfully',
+          icon: 'success'
+        }"
+        class="btn btn-primary"
+      >
+        Click here!
+      </button>
+    </div>
+  </div>
+</div>-->

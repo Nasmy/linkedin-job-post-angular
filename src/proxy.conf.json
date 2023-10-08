@@ -1,0 +1,6 @@
+{
+  "/auth/*": {
+    "target": "http://api.growthmetrics.com",
+    "secure": false
+  }
+}
